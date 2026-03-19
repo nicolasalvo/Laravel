@@ -22,8 +22,15 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return \Inertia\Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::get('/play', function () {
+        return \Inertia\Inertia::render('Play/Index');
+    })->name('play.index');
+
+    Route::resource('games', \App\Http\Controllers\GameController::class)
+        ->middleware('role:Administrador,Gestor');
 });
 
 
