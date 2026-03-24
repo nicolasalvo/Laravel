@@ -1,5 +1,5 @@
 import React from "react";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 
 export default function Dashboard() {
     const games = [
@@ -10,7 +10,7 @@ export default function Dashboard() {
             estado: "Disponible",
             image: "../../../Files/CaratulaSlope.png",
             creador: "Nicolas Oxovi",
-            ruta: "",
+            ruta: "/games/slope/index.html",
         },
         {
             id: 2,
@@ -52,9 +52,12 @@ export default function Dashboard() {
     return (
         <div className="font-sans p-5 text-gray-800 relative">
             <Head title="Dashboard CRM" />
-            <button className="absolute top-5 right-5 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            <a
+                href="/logout" 
+                className="absolute top-5 right-5 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
                 Cerrar Sesión
-            </button>
+            </a>
             <div className="flex justify-center mt-5 flex-col">
                 <h1 className="text-white text-3xl font-bold text-center">
                     Bienvenido al CRM Dashboard
