@@ -1,59 +1,33 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Plataforma de Minijuegos CRM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto trata de una página web donde los usuarios pueden jugar a diferentes minijuegos, como el "Slope 3D". También tiene un panel para poder editar y subir los juegos que aparecen.
 
-## About Laravel
+## Herramientas que he usado
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Para hacer esto, he usado varios lenguajes de programación y herramientas unidas entre sí:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Laravel (creado con PHP):** Es la base principal y el cerebro de mi proyecto. Se encarga de guardar la información, gestionar la seguridad y controlar qué páginas se pueden ver.
+- **React e Inertia.js:** He usado React para diseñar las pantallas y los menús visuales. Como Laravel y React son lenguajes con propósitos diferentes, usé una herramienta llamada Inertia.js que sirve de puente entre los dos para que hablen fácilmente entre sí y las páginas carguen muy rápido sin parpadear.
+- **Tailwind CSS:** Lo usé para pintar todo con facilidad: ponerle colores, darle forma a los botones y ordenar el menú de los juegos sin tener que escribir hojas de estilos súper largas.
+- **Vue 3 y Three.js:** El juego "Slope" en primera persona requiere crear figuras espaciales y formas geométricas. Por eso, el código gráfico de ese juego está pintado directamente utilizando Vue y Three.js, que son geniales para crear modelos 3D y videojuegos ligeros en el navegador.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. La base de todo (Cómo funciona el proyecto)
 
-## Learning Laravel
+Para no complicarme haciendo dos proyectos largos por separado (uno de diseño web visual y un servidor privado oculto), decidí combinarlo todo en la misma carpeta. Gracias al puente llamado Inertia, siempre que el usuario pincha en un botón de la página, el cerebro de Laravel busca los datos correctos del juego y se los manda directamente al dibujo de React súper rápido.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 2. Base de Datos
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Para no perder la información, he usado varias tablas de bases de datos conectadas entre sí usando las herramientas fáciles de Laravel. Simplemente programé un código base en mis archivos que dice cómo quiero que se ordenen mis tablas (la de usuarios con su nombre y contraseña, y la de los juegos con sus títulos, fotos de portada y estado). Cuando arranco el proyecto de sistema, Laravel lee ese código y construye los casilleros de la base de datos automáticamente.
 
-## Laravel Sponsors
+### 3. Seguridad de usuarios y contraseñas
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Para que no cualquiera pueda editar, he protegido el sistema usando "Laravel Jetstream", que es un modo que trae Laravel para controlar usuarios.
 
-### Premium Partners
+- Me permite tener unas pantallas para que la gente se registre, ponga su correo y cree una contraseña encriptada.
+- Cada vez que alguien entre, el sistema le da un token invisible al navegador para afirmar que es el dueño de la sesión.
+- Modifiqué el código en el botón de "Cerrar sesión" para que, cuando el usuario quiera irse, mande obligatoriamente la señal de destruir ese "token" y volver a bloquear las pantallas privadas de la web.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 4. Administrar y Editar los juegos
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Hice unos códigos en un archivo al que le puse como título "Controlador de juegos". Ahí programé los casos por si alguien quiere crear un juego nuevo en la plataforma, cambiarle el nombre a uno existente o directamente borrar su registro.
+Además, he asignado **Roles** a mis cuentas. El código de la web comprueba de qué rol eres antes de trabajar; si le digo al código que exija un rol de "Administrador", los usuarios de niveles rasos ("Estudiante") que prueben el botón de "Editar", directamente no podrán utilizarlo y el sistema detendrá su petición.
