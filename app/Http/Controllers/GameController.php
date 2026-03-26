@@ -24,6 +24,7 @@ class GameController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image_url' => 'nullable|string|max:1024',
             'is_published' => 'boolean',
             'url' => 'nullable|string|url',
         ]);
@@ -48,6 +49,7 @@ class GameController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image_url' => 'nullable|string|max:1024',
             'is_published' => 'boolean',
             'url' => 'nullable|string|url',
         ]);

@@ -1,27 +1,23 @@
 import React from 'react';
-import AppLayout from '@/Layouts/AppLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
 
 export default function Edit({ game }) {
     const { data, setData, put, processing, errors } = useForm({
         title: game.title,
         description: game.description || '',
+        image_url: game.image_url || '',
         is_published: !!game.is_published,
         url: game.url || '',
     });
 
     const submit = (e) => {
         e.preventDefault();
-        put(route('games.update', game.id));
+        put(`/admin/games/${game.id}`);
     };
 
     return (
-        <AppLayout title="Edit Game">
-            <template name="header">
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Edit Game: {game.title}
-                </h2>
-            </template>
+        <AdminLayout title={`Edit Game: ${game.title}`}>
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -52,6 +48,18 @@ export default function Edit({ game }) {
                             </div>
 
                             <div>
+                                <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">Image URL (Carátula)</label>
+                                <input
+                                    type="text"
+                                    id="image_url"
+                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm"
+                                    value={data.image_url}
+                                    onChange={e => setData('image_url', e.target.value)}
+                                />
+                                {errors.image_url && <div className="text-red-500 text-sm mt-1">{errors.image_url}</div>}
+                            </div>
+
+                            <div>
                                 <label htmlFor="url" className="block text-sm font-medium text-gray-700">Game URL</label>
                                 <input
                                     type="url"
@@ -79,7 +87,7 @@ export default function Edit({ game }) {
 
                             <div className="flex items-center justify-end">
                                 <Link
-                                    href={route('games.index')}
+                                    href="/admin/games"
                                     className="mr-4 text-sm text-gray-600 hover:text-gray-900"
                                 >
                                     Cancel
@@ -96,6 +104,6 @@ export default function Edit({ game }) {
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </AdminLayout>
     );
 }

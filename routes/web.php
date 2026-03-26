@@ -30,14 +30,17 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return \Inertia\Inertia::render('Dashboard');
+        $games = \App\Models\Game::with('creator')->where('is_published', true)->get();
+        return \Inertia\Inertia::render('Dashboard', [
+            'games' => $games
+        ]);
     })->name('dashboard');
 
     Route::get('/play', function () {
         return \Inertia\Inertia::render('Play/Index');
     })->name('play.index');
 
-    Route::resource('games', \App\Http\Controllers\GameController::class)
+    Route::resource('admin/games', \App\Http\Controllers\GameController::class)
         ->middleware('role:Administrador,Gestor');
 });
 

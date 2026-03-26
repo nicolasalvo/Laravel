@@ -9,6 +9,7 @@ class Game extends Model
     protected $fillable = [
         'title',
         'description',
+        'image_url',
         'is_published',
         'url',
         'user_id',

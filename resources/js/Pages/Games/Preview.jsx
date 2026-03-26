@@ -1,23 +1,18 @@
 import React from 'react';
-import AppLayout from '@/Layouts/AppLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link } from '@inertiajs/react';
 
 export default function Preview({ game }) {
     return (
-        <AppLayout title="Preview Game">
-            <template name="header">
-                <div className="flex justify-between items-center w-full">
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        Preview: {game.title}
-                    </h2>
-                    <Link
-                        href={route('games.index')}
-                        className="text-sm text-gray-600 hover:text-gray-900 underline"
-                    >
-                        Back to Games
-                    </Link>
-                </div>
-            </template>
+        <AdminLayout title={`Preview: ${game.title}`}>
+            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 pt-4">
+                <Link
+                    href="/admin/games"
+                    className="text-sm text-indigo-600 hover:text-indigo-900 underline"
+                >
+                    &larr; Back to Games
+                </Link>
+            </div>
 
             <div className="py-6">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -50,6 +45,6 @@ export default function Preview({ game }) {
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </AdminLayout>
     );
 }

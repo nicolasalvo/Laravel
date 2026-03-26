@@ -1,27 +1,23 @@
 import React from 'react';
-import AppLayout from '@/Layouts/AppLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
         description: '',
+        image_url: '',
         is_published: false,
         url: '',
     });
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('games.store'));
+        post('/admin/games');
     };
 
     return (
-        <AppLayout title="Create Game">
-            <template name="header">
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Create New Game
-                </h2>
-            </template>
+        <AdminLayout title="Create New Game">
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -52,6 +48,19 @@ export default function Create() {
                             </div>
 
                             <div>
+                                <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">Image URL (Carátula)</label>
+                                <input
+                                    type="text"
+                                    id="image_url"
+                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm"
+                                    value={data.image_url}
+                                    onChange={e => setData('image_url', e.target.value)}
+                                    placeholder="../../../Files/Caratula.png"
+                                />
+                                {errors.image_url && <div className="text-red-500 text-sm mt-1">{errors.image_url}</div>}
+                            </div>
+
+                            <div>
                                 <label htmlFor="url" className="block text-sm font-medium text-gray-700">Game URL</label>
                                 <input
                                     type="url"
@@ -79,7 +88,7 @@ export default function Create() {
 
                             <div className="flex items-center justify-end">
                                 <Link
-                                    href={route('games.index')}
+                                    href="/admin/games"
                                     className="mr-4 text-sm text-gray-600 hover:text-gray-900"
                                 >
                                     Cancel
@@ -96,6 +105,6 @@ export default function Create() {
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </AdminLayout>
     );
 }
