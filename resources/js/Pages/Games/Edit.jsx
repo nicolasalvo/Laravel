@@ -1,14 +1,14 @@
-import React from 'react';
-import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm, Link } from '@inertiajs/react';
+import React from "react";
+import AdminLayout from "@/Layouts/AdminLayout";
+import { Head, useForm, Link } from "@inertiajs/react";
 
 export default function Edit({ game }) {
     const { data, setData, put, processing, errors } = useForm({
         title: game.title,
-        description: game.description || '',
-        image_url: game.image_url || '',
+        description: game.description || "",
+        image_url: game.image_url || "",
         is_published: !!game.is_published,
-        url: game.url || '',
+        url: game.url || "",
     });
 
     const submit = (e) => {
@@ -18,57 +18,100 @@ export default function Edit({ game }) {
 
     return (
         <AdminLayout title={`Edit Game: ${game.title}`}>
-
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6 max-w-2xl mx-auto">
                         <form onSubmit={submit} className="space-y-6">
                             <div>
-                                <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+                                <label
+                                    htmlFor="title"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Title
+                                </label>
                                 <input
                                     type="text"
                                     id="title"
-                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm"
+                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm text-black"
                                     value={data.title}
-                                    onChange={e => setData('title', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("title", e.target.value)
+                                    }
                                 />
-                                {errors.title && <div className="text-red-500 text-sm mt-1">{errors.title}</div>}
+                                {errors.title && (
+                                    <div className="text-red-500 text-sm mt-1">
+                                        {errors.title}
+                                    </div>
+                                )}
                             </div>
 
                             <div>
-                                <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+                                <label
+                                    htmlFor="description"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Description
+                                </label>
                                 <textarea
                                     id="description"
                                     rows="4"
-                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm"
+                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm text-black"
                                     value={data.description}
-                                    onChange={e => setData('description', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("description", e.target.value)
+                                    }
                                 ></textarea>
-                                {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
+                                {errors.description && (
+                                    <div className="text-red-500 text-sm mt-1">
+                                        {errors.description}
+                                    </div>
+                                )}
                             </div>
 
                             <div>
-                                <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">Image URL (Carátula)</label>
+                                <label
+                                    htmlFor="image_url"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Image URL (Carátula)
+                                </label>
                                 <input
                                     type="text"
                                     id="image_url"
-                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm"
+                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm text-black"
                                     value={data.image_url}
-                                    onChange={e => setData('image_url', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("image_url", e.target.value)
+                                    }
                                 />
-                                {errors.image_url && <div className="text-red-500 text-sm mt-1">{errors.image_url}</div>}
+                                {errors.image_url && (
+                                    <div className="text-red-500 text-sm mt-1">
+                                        {errors.image_url}
+                                    </div>
+                                )}
                             </div>
 
                             <div>
-                                <label htmlFor="url" className="block text-sm font-medium text-gray-700">Game URL</label>
+                                <label
+                                    htmlFor="url"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Game URL
+                                </label>
                                 <input
                                     type="url"
                                     id="url"
-                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm"
+                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm text-black"
                                     value={data.url}
-                                    onChange={e => setData('url', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("url", e.target.value)
+                                    }
                                 />
-                                {errors.url && <div className="text-red-500 text-sm mt-1">{errors.url}</div>}
+                                {errors.url && (
+                                    <div className="text-red-500 text-sm mt-1">
+                                        {errors.url}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex items-center">
@@ -77,12 +120,24 @@ export default function Edit({ game }) {
                                     type="checkbox"
                                     className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
                                     checked={data.is_published}
-                                    onChange={e => setData('is_published', e.target.checked)}
+                                    onChange={(e) =>
+                                        setData(
+                                            "is_published",
+                                            e.target.checked,
+                                        )
+                                    }
                                 />
-                                <label htmlFor="is_published" className="ml-2 block text-sm text-gray-900">
+                                <label
+                                    htmlFor="is_published"
+                                    className="ml-2 block text-sm text-gray-900"
+                                >
                                     Publish this game
                                 </label>
-                                {errors.is_published && <div className="text-red-500 text-sm mt-1 block w-full">{errors.is_published}</div>}
+                                {errors.is_published && (
+                                    <div className="text-red-500 text-sm mt-1 block w-full">
+                                        {errors.is_published}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex items-center justify-end">

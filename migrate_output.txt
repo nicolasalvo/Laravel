@@ -1,0 +1,26 @@
+
+   INFO  Running migrations.  
+
+  2026_04_07_141044_add_two_factor_columns_to_users_table  5.57ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42701]: Duplicate column: 7 ERROR:  ya existe la columna «two_factor_secret» en la relación «users» (Connection: pgsql, Host: 127.0.0.1, Port: 5432, Database: laravel, SQL: alter table "users" add column "two_factor_secret" text null)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
+    834▕             $exceptionType = $this->isUniqueConstraintError($e)
+    835▕                 ? UniqueConstraintViolationException::class
+    836▕                 : QueryException::class;
+    837▕ 
+  ➜ 838▕             throw new $exceptionType(
+    839▕                 $this->getNameWithReadWriteType(),
+    840▕                 $query,
+    841▕                 $this->prepareBindings($bindings),
+    842▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:584
+      PDOException::("SQLSTATE[42701]: Duplicate column: 7 ERROR:  ya existe la columna «two_factor_secret» en la relación «users»")
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:584
+      PDOStatement::execute()
+
