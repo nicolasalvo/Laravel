@@ -40,6 +40,11 @@ Route::middleware([
         return \Inertia\Inertia::render('Play/Index');
     })->name('play.index');
 
+    // Face Profile Routes
+    Route::get('/profile', [\App\Http\Controllers\ProfileFaceController::class, 'index'])->name('profile.index');
+    Route::post('/profile/face-photo', [\App\Http\Controllers\ProfileFaceController::class, 'upload'])->name('profile.face.upload');
+    Route::post('/verify-face', [\App\Http\Controllers\ProfileFaceController::class, 'verify'])->name('face.verify');
+
     Route::resource('admin/games', \App\Http\Controllers\GameController::class)
         ->middleware('role:Administrador,Gestor');
 });
