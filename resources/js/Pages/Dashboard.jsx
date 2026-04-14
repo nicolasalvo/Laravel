@@ -3,7 +3,9 @@ import { Head, Link, usePage } from "@inertiajs/react";
 
 export default function Dashboard({ games = [] }) {
     const { auth } = usePage().props;
-    const isManager = auth?.user?.roles?.includes('Administrador') || auth?.user?.roles?.includes('Gestor');
+    const isManager =
+        auth?.user?.roles?.includes("Administrador") ||
+        auth?.user?.roles?.includes("Gestor");
     return (
         <div className="min-h-screen bg-slate-900 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-indigo-950 to-slate-900 font-sans p-4 sm:p-8 relative">
             <Head title="Dashboard CRM" />
@@ -42,7 +44,10 @@ export default function Dashboard({ games = [] }) {
                     >
                         <div className="relative overflow-hidden h-52">
                             <img
-                                src={game.image_url || 'https://via.placeholder.com/300x200?text=No+Image'}
+                                src={
+                                    game.image_url ||
+                                    "https://via.placeholder.com/300x200?text=No+Image"
+                                }
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
                                 alt={game.title}
                             />
@@ -73,14 +78,14 @@ export default function Dashboard({ games = [] }) {
                                     </span>
                                 </div>
                                 <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">
-                                    Por {game.creator?.name || 'Sistema'}
+                                    Por {game.creator?.name || "Sistema"}
                                 </p>
                             </div>
 
                             {game.is_published ? (
                                 <button
                                     onClick={() =>
-                                        (window.location.href = game.url || '#')
+                                        (window.location.href = game.url || "#")
                                     }
                                     className="w-full bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 transition-all duration-300 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-indigo-500/25 active:scale-95 tracking-wide"
                                 >
