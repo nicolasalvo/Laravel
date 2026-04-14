@@ -22,16 +22,23 @@ async def verify_faces(foto1: UploadFile = File(...), foto2: UploadFile = File(.
             img2_path=img2_path,
             model_name="Facenet",
             detector_backend="opencv",
-            enforce_detection=False
+            enforce_detection=True
         )
         os.remove(img1_path)
         os.remove(img2_path)
         
-        # ensure distance is float out of numpy formats or similar to be JSON serializable nicely. FastAPI usually handles it but just in case.
+        distance = float(result["distance"])
+        is_verified = bool(result["verified"])
+
         return JSONResponse(content={
-            "verified": bool(result["verified"]), 
-            "distance": float(result["distance"])
+            "verified": is_verified, 
+            "distance": distance
         })
+    except ValueError as ve:
+        # Se activa si enforce_detection=True no encuentra un rostro humano
+        if os.path.exists(img1_path): os.remove(img1_path)
+        if os.path.exists(img2_path): os.remove(img2_path)
+        return JSONResponse(content={"verified": False, "distance": 1.0, "error": "No se ha detectado ningún rostro claramente."})
     except Exception as e:
         if os.path.exists(img1_path): os.remove(img1_path)
         if os.path.exists(img2_path): os.remove(img2_path)
