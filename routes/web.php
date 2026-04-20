@@ -43,6 +43,10 @@ Route::middleware([
     // Face Profile Routes
     Route::get('/profile', [\App\Http\Controllers\ProfileFaceController::class, 'index'])->name('profile.index');
     Route::post('/profile/face-photo', [\App\Http\Controllers\ProfileFaceController::class, 'upload'])->name('profile.face.upload');
+    // Chat Routes
+    Route::get('/messages', [\App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    Route::post('/messages', [\App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+
     Route::post('/verify-face', [\App\Http\Controllers\ProfileFaceController::class, 'verify'])->name('face.verify');
 
     Route::resource('admin/games', \App\Http\Controllers\GameController::class)

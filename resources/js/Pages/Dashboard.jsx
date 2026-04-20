@@ -100,11 +100,13 @@ export default function Dashboard({ games = [] }) {
                         if (response.data.verified) {
                             setVerificationSuccess(true);
                             setTimeout(() => {
-                                window.location.href = selectedGame.url || "#";
+                                window.location.href = `/play?id=${selectedGame.id}`;
                             }, 1000);
                         } else {
+                            const distance = response.data.distance;
+                            const threshold = response.data.threshold || 0.40;
                             setVerificationError(
-                                "Validación facial fallida: Rostro no reconocido (La distancia superó el umbral permitido).",
+                                `Validación facial fallida: Rostro no reconocido. Puntuación de diferencia: ${distance} (Límite: ${threshold}). Intenta mejorar la iluminación o mirar directamente a cámara.`
                             );
                             setIsVerifying(false);
                         }
