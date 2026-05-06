@@ -49,6 +49,18 @@ Route::middleware([
 
     Route::post('/verify-face', [\App\Http\Controllers\ProfileFaceController::class, 'verify'])->name('face.verify');
 
+    Route::get('/test-event', function () {
+        $game = [
+            'title' => 'Slope Game',
+            'description' => 'Un juego de velocidad increíble.',
+            'published_at' => now()
+        ];
+        
+        event(new \App\Events\GamePublished($game));
+        
+        return "Evento GamePublished enviado a RabbitMQ!";
+    });
+
     Route::resource('admin/games', \App\Http\Controllers\GameController::class)
         ->middleware('role:Administrador,Gestor');
 });

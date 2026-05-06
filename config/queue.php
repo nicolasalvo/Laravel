@@ -89,6 +89,56 @@ return [
             ],
         ],
 
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'queue' => env('RABBITMQ_QUEUE', 'default'),
+            'connection' => PhpAmqpLib\Connection\AMQPLazyConnection::class,
+
+            'hosts' => [
+                [
+                    'host' => env('RABBITMQ_HOST', '127.0.0.1'),
+                    'port' => env('RABBITMQ_PORT', 5672),
+                    'user' => env('RABBITMQ_USER', 'guest'),
+                    'password' => env('RABBITMQ_PASSWORD', 'guest'),
+                    'vhost' => env('RABBITMQ_VHOST', '/'),
+                ],
+            ],
+
+            'options' => [
+                'ssl_options' => [
+                    'cafile' => env('RABBITMQ_SSL_CAFILE', null),
+                    'local_cert' => env('RABBITMQ_SSL_LOCALCERT', null),
+                    'local_key' => env('RABBITMQ_SSL_LOCALKEY', null),
+                    'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
+                    'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
+                ],
+                'queue' => [
+                    'exchange' => env('RABBITMQ_EXCHANGE_NAME'),
+                    'exchange_type' => env('RABBITMQ_EXCHANGE_TYPE', 'direct'),
+                    'exchange_passive' => env('RABBITMQ_EXCHANGE_PASSIVE', false),
+                    'exchange_durable' => env('RABBITMQ_EXCHANGE_DURABLE', true),
+                    'exchange_auto_delete' => env('RABBITMQ_EXCHANGE_AUTODELETE', false),
+                    'exchange_arguments' => env('RABBITMQ_EXCHANGE_ARGUMENTS'),
+                    'queue_passive' => env('RABBITMQ_QUEUE_PASSIVE', false),
+                    'queue_durable' => env('RABBITMQ_QUEUE_DURABLE', true),
+                    'queue_exclusive' => env('RABBITMQ_QUEUE_EXCLUSIVE', false),
+                    'queue_auto_delete' => env('RABBITMQ_QUEUE_AUTODELETE', false),
+                    'queue_arguments' => env('RABBITMQ_QUEUE_ARGUMENTS'),
+                ],
+            ],
+
+            /*
+             * Determine the number of seconds before a job should be retried when an unexpected error occurs.
+             * A value of null will use the default retry configuration for the queue driver.
+             */
+            'retry_after' => 90,
+
+            /*
+             * Determine whether the queue should be created if it does not already exist.
+             */
+            'after_commit' => false,
+        ],
+
     ],
 
     /*
