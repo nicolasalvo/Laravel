@@ -1,4 +1,19 @@
 services:
+  db:
+    image: postgres:15
+    container_name: blog_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: laravel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: UNIcolas196_
+    ports:
+      - "5434:5432"
+    volumes:
+      - blog_postgres_data:/var/lib/postgresql/data
+    networks:
+      - laravel
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
@@ -14,3 +29,6 @@ services:
 networks:
   laravel:
     driver: bridge
+
+volumes:
+  blog_postgres_data:

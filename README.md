@@ -50,31 +50,46 @@ El flujo es el siguiente: el usuario sube una foto de registro a su perfil, que 
 
 ---
 
-## La base de datos
+## La base de datos y contenedores (Docker)
 
-Toda la información del proyecto se guarda en una base de datos llamada **SQLite**. A diferencia de otros sistemas de base de datos que necesitan un servidor propio, SQLite guarda todo en un único archivo del disco llamado `database.sqlite`, lo que la hace muy práctica para trabajar en local.
+Toda la información del proyecto se guarda en una base de datos relacional robusta llamada **PostgreSQL**. A diferencia de guardar datos en un simple archivo local, PostgreSQL requiere su propio servidor.
 
-Las tablas más importantes son la de usuarios, que almacena el nombre, el correo, la contraseña cifrada y la ruta de la foto facial de cada persona; la de juegos, con el nombre, la descripción y la imagen de portada de cada juego; la de mensajes, donde se guardan todos los mensajes del chat junto con el identificador del usuario que los escribió; y la de roles, que es la que determina si una cuenta es de tipo Administrador o Estudiante.
+Para no tener que instalar bases de datos y configuraciones complejas directamente en Windows, usamos **Docker**. Docker nos permite crear "contenedores", que son como pequeñas cajas mágicas aisladas donde metemos nuestro servidor PostgreSQL. Gracias a esto, el proyecto funciona igual en cualquier ordenador.
 
-Estas tablas no se crean a mano. Laravel usa unos archivos llamados migraciones, que son como instrucciones escritas en código, y con el comando `php artisan migrate` construye toda la estructura de la base de datos automáticamente.
+Las tablas más importantes son la de usuarios, la de juegos, la de mensajes del chat y la de roles (que determina si una cuenta es Administrador o Estudiante). Todas estas tablas no se crean a mano: Laravel usa unos archivos llamados migraciones, que son como instrucciones escritas en código, y con el comando `php artisan migrate` construye toda la estructura automáticamente dentro del contenedor de la base de datos.
+
+---
+
+## Tareas en segundo plano (RabbitMQ)
+
+Hay ocasiones en las que el servidor tiene que realizar tareas que pueden tardar un tiempo (por ejemplo, notificar a los usuarios de un evento, subir archivos pesados o procesar datos). Si el servidor lo hiciera en el momento, la web se quedaría "pensando" y bloqueada para el usuario que ha hecho clic.
+
+Para solucionar esto, hemos implementado **RabbitMQ**, que es un sistema de "colas de mensajería" (Message Broker) que también hemos encapsulado dentro de un contenedor de Docker.
+
+**¿Cómo lo hemos implementado y cómo funciona?**
+1. **El Encolado:** Cuando Laravel (nuestro backend) necesita hacer una tarea pesada (como avisar de que se ha publicado un juego con el evento `GamePublished`), no la ejecuta al instante. En su lugar, "empaqueta" esa tarea y se la entrega a RabbitMQ.
+2. **La Cola:** RabbitMQ recibe el paquete y lo guarda de forma segura en una "fila de espera" (una cola). Al hacer esto rápido, Laravel queda libre inmediatamente para seguir mostrando páginas web a toda velocidad sin hacer esperar al usuario.
+3. **El Trabajador (Worker):** Por detrás, tenemos otro proceso secundario de Laravel (llamado *queue listener* o trabajador) que está siempre vigilando a RabbitMQ. En cuanto ve que hay una tarea pendiente en la cola, la coge y la resuelve tranquilamente en segundo plano (background) sin interrumpir la navegación de nadie.
 
 ---
 
 ## Cómo arrancar el proyecto
 
-Para que todo funcione hace falta levantar varios servidores a la vez, cada uno en una terminal distinta.
+Para que todo este ecosistema funcione a la vez, hemos simplificado el proceso y lo hemos agrupado:
 
+1. Primero, encendemos la base de datos y RabbitMQ usando Docker:
 ```bash
-# Servidor principal de Laravel
-php artisan serve
+docker compose up -d
+```
 
-# Servidor de WebSocket para el chat en tiempo real
-php artisan reverb:start
+2. Luego, levantamos los servidores de Laravel y el Frontend de golpe con nuestro comando preparado:
+```bash
+composer run dev
+```
+*(Este comando enciende automáticamente el servidor web, el trabajador de las colas de RabbitMQ y el compilador visual de Vite, todo a la vez).*
 
-# Compilador del frontend (React + Vue)
-npm run dev
-
-# Microservicio de reconocimiento facial (solo si se necesita)
+3. Si necesitas encender el reconocimiento facial (en otra pestaña de la terminal):
+```bash
 uvicorn face_service:app --port 8001
 ```
 
@@ -82,4 +97,4 @@ uvicorn face_service:app --port 8001
 
 ## Resumen de tecnologías
 
-**Laravel** actúa como el núcleo del proyecto: gestiona las rutas, la lógica de negocio, la autenticación y la base de datos. **React** y **Vue 3** construyen la interfaz que ve el usuario, conectadas al servidor mediante **Inertia.js**. **Laravel Reverb** y **Laravel Echo** se encargan de la comunicación en tiempo real del chat. Y el microservicio de **Python con FastAPI y DeepFace** aporta la capacidad de reconocimiento facial de forma aislada y sin interferir con el resto del sistema. Todo el almacenamiento de datos se centraliza en una base de datos **SQLite**.
+**Laravel** actúa como el núcleo del proyecto gestionando la lógica de negocio y la seguridad. **React** y **Vue 3** construyen la interfaz que ve el usuario, conectadas mediante **Inertia.js**. **Reverb** y **Echo** se encargan de la comunicación en tiempo real del chat. **RabbitMQ** procesa las tareas pesadas en segundo plano para no saturar la web. El microservicio de **Python** aporta el reconocimiento facial. Y todo se sostiene sobre **PostgreSQL**, empaquetado junto a RabbitMQ dentro de **Docker** para asegurar que todo funcione sin fallos.
